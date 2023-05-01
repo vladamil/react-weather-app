@@ -50,6 +50,22 @@
    outline: none;
 }
 
+.temp-btn {
+   width: 35px;
+   height: 35px;
+   text-align: center;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   margin-left: 5px;
+}
+
+.temp-btn.active {
+   box-shadow: inset 2px 2px 5px #777;
+   transform: translateY(2px);
+   background: #e5e5e5;
+}
+
 .weather-main {
    display: flex;
    flex-direction: column;
@@ -62,9 +78,8 @@
 
 .weather-main h3 {
    font-size: 30px;
-   /* font-weight: 200; */
+   font-weight: 200;
    color: #efcc00;
-   /* transform: translateY(-30px); */
 }
 
 .weather-icon {
