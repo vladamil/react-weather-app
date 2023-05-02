@@ -5,6 +5,7 @@ import Weather from './components/Weather';
 
 function App() {
    const [location, setLocation] = useState();
+   const [city, setCity] = useState('');
    const [units, setUnits] = useState('metric');
    const [weatherData, setWeatherData] = useState();
 
@@ -30,20 +31,50 @@ function App() {
          };
 
          getData();
-         // set location to null
-         // setLocation(null);
-         console.log('hello');
       }
+
+      if (weatherData && !location) {
+         const getData = async () => {
+            const res = await fetch(
+               `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
+            );
+            const data = await res.json();
+            setWeatherData(data);
+         };
+
+         getData();
+      }
+
+      console.log('hello');
    }, [location, units]);
 
    const handleUnits = (unit) => {
       setUnits(unit);
    };
 
+   const handleCity = (city) => {
+      setCity(city);
+   };
+
+   const getWeatherByCity = async (city) => {
+      setLocation(null);
+      const res = await fetch(
+         `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
+      );
+      const data = await res.json();
+      setWeatherData(data);
+   };
+
    return (
       <div className="app">
          <div className="container">
-            <Input units={units} handleUnits={handleUnits} />
+            <Input
+               units={units}
+               city={city}
+               handleUnits={handleUnits}
+               handleCity={handleCity}
+               getWeatherByCity={getWeatherByCity}
+            />
             <Weather />
             <div>Hello!</div>
             <div>Hello!</div>

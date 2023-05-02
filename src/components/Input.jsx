@@ -1,17 +1,20 @@
 import { useState } from 'react';
 
-function Input({ units, handleUnits }) {
-   const [city, setCity] = useState('');
-
+function Input({ units, city, handleUnits, handleCity, getWeatherByCity }) {
    const handleChange = (e) => {
-      setCity(e.target.value);
+      handleCity(e.target.value);
+   };
+
+   const handleSubmit = (e) => {
+      e.preventDefault();
+      getWeatherByCity(city);
    };
 
    return (
       <div className="search-bar">
          <div>Reload BTN</div>
          <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                <input
                   className="input-city"
                   type="text"
