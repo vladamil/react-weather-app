@@ -6,10 +6,11 @@ import Weather from './components/Weather';
 function App() {
    const [location, setLocation] = useState();
    const [city, setCity] = useState('');
+   const [citySearchField, setCitySearchField] = useState('');
    const [units, setUnits] = useState('metric');
    const [weatherData, setWeatherData] = useState();
 
-   // Get current position(lat/lon)
+   // Get initial current position(lat/lon)
    useEffect(() => {
       navigator.geolocation.getCurrentPosition((position) => {
          setLocation({
@@ -19,8 +20,8 @@ function App() {
       });
    }, []);
 
-   // Get initial weather data based on current position
    useEffect(() => {
+      // Get initial weather data based on current position
       if (location) {
          const getData = async () => {
             const res = await fetch(
@@ -33,6 +34,7 @@ function App() {
          getData();
       }
 
+      // Get weather data based on units change
       if (weatherData && !location) {
          const getData = async () => {
             const res = await fetch(
@@ -54,10 +56,23 @@ function App() {
 
    const handleCity = (city) => {
       setCity(city);
+      setCitySearchField(city);
    };
 
+   // Get current position
+   const handleLocation = () => {
+      navigator.geolocation.getCurrentPosition((position) => {
+         setLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+         });
+      });
+   };
+
+   // Get weather data based on city search
    const getWeatherByCity = async (city) => {
       setLocation(null);
+      setCitySearchField('');
       const res = await fetch(
          `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
       );
@@ -71,13 +86,15 @@ function App() {
             <Input
                units={units}
                city={city}
+               citySearchField={citySearchField}
                handleUnits={handleUnits}
                handleCity={handleCity}
+               handleLocation={handleLocation}
                getWeatherByCity={getWeatherByCity}
             />
             <Weather />
-            <div>Hello!</div>
-            <div>Hello!</div>
+            <div>Forecast Details</div>
+            <div>Forecast 5 Days</div>
          </div>
       </div>
    );

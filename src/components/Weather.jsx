@@ -9,6 +9,7 @@ function Weather() {
             <p>max: 27°C</p>
          </div>
          <p className="weather-temp">-22°</p>
+         <div className="line"></div>
          {/* DETAILS HERE */}
       </div>
    );

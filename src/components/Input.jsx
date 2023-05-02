@@ -1,6 +1,14 @@
-import { useState } from 'react';
+import { ImLocation2 } from 'react-icons/im';
 
-function Input({ units, city, handleUnits, handleCity, getWeatherByCity }) {
+function Input({
+   units,
+   city,
+   citySearchField,
+   handleUnits,
+   handleCity,
+   handleLocation,
+   getWeatherByCity,
+}) {
    const handleChange = (e) => {
       handleCity(e.target.value);
    };
@@ -8,18 +16,24 @@ function Input({ units, city, handleUnits, handleCity, getWeatherByCity }) {
    const handleSubmit = (e) => {
       e.preventDefault();
       getWeatherByCity(city);
+      e.target.children[0].blur();
    };
 
    return (
       <div className="search-bar">
-         <div>Reload BTN</div>
+         <div>
+            <ImLocation2
+               onClick={handleLocation}
+               style={{ fontSize: '30px', color: 'white' }}
+            />
+         </div>
          <div>
             <form onSubmit={handleSubmit}>
                <input
                   className="input-city"
                   type="text"
                   placeholder="Enter city..."
-                  value={city}
+                  value={citySearchField}
                   onChange={handleChange}
                />
             </form>
