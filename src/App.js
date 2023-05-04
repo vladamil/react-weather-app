@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { API_URL, API_KEY } from './api';
 import Input from './components/Input';
 import Weather from './components/Weather';
+import Forecast from './components/Forecast';
 
 function App() {
    const [location, setLocation] = useState();
@@ -93,8 +94,7 @@ function App() {
                getWeatherByCity={getWeatherByCity}
             />
             <Weather />
-            <div>Forecast Details</div>
-            <div>Forecast 5 Days</div>
+            <Forecast />
          </div>
       </div>
    );

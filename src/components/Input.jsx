@@ -24,7 +24,10 @@ function Input({
          <div>
             <ImLocation2
                onClick={handleLocation}
-               style={{ fontSize: '30px', color: 'white' }}
+               style={{
+                  fontSize: '30px',
+                  color: 'white',
+               }}
             />
          </div>
          <div>
