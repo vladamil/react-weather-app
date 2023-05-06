@@ -10,6 +10,7 @@ function App() {
    const [citySearchField, setCitySearchField] = useState('');
    const [units, setUnits] = useState('metric');
    const [weatherData, setWeatherData] = useState();
+   const [ForecastData, setForecastData] = useState();
 
    // Get initial current position(lat/lon)
    useEffect(() => {
@@ -25,31 +26,45 @@ function App() {
       // Get initial weather data based on current position
       if (location) {
          const getData = async () => {
-            const res = await fetch(
-               `${API_URL}/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
-            );
-            const data = await res.json();
-            setWeatherData(data);
+            const res = await Promise.all([
+               fetch(
+                  `${API_URL}/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
+               ),
+               fetch(
+                  `${API_URL}/forecast?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
+               ),
+            ]);
+            const weatherData = await res[0].json();
+            const forecastData = await res[1].json();
+            setWeatherData(weatherData);
+            setForecastData(forecastData);
          };
 
          getData();
       }
+   }, [location, units]);
 
+   useEffect(() => {
       // Get weather data based on units change
       if (weatherData && !location) {
          const getData = async () => {
-            const res = await fetch(
-               `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
-            );
-            const data = await res.json();
-            setWeatherData(data);
+            const res = await Promise.all([
+               fetch(
+                  `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
+               ),
+               fetch(
+                  `${API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${units}`
+               ),
+            ]);
+            const weatherData = await res[0].json();
+            const forecastData = await res[1].json();
+            setWeatherData(weatherData);
+            setForecastData(forecastData);
          };
 
          getData();
       }
-
-      console.log('hello');
-   }, [location, units]);
+   }, [units]);
 
    const handleUnits = (unit) => {
       setUnits(unit);
@@ -60,7 +75,7 @@ function App() {
       setCitySearchField(city);
    };
 
-   // Get current position
+   // Get current position on demand (lat/lon)
    const handleLocation = () => {
       navigator.geolocation.getCurrentPosition((position) => {
          setLocation({
@@ -74,11 +89,15 @@ function App() {
    const getWeatherByCity = async (city) => {
       setLocation(null);
       setCitySearchField('');
-      const res = await fetch(
-         `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
-      );
-      const data = await res.json();
-      setWeatherData(data);
+
+      const res = await Promise.all([
+         fetch(`${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`),
+         fetch(`${API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${units}`),
+      ]);
+      const weatherData = await res[0].json();
+      const forecastData = await res[1].json();
+      setWeatherData(weatherData);
+      setForecastData(forecastData);
    };
 
    return (
