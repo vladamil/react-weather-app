@@ -17,11 +17,10 @@
 .container {
    /* for develop */
    color: white;
-
-   max-width: 1080px;
    height: 100%;
-   margin: auto;
    padding: 40px 20px;
+   max-width: 1080px;
+   margin: auto;
    display: flex;
    flex-direction: column;
    align-items: center;

@@ -3,11 +3,11 @@ import { TbArrowBarToDown } from 'react-icons/tb';
 import { WiHumidity, WiStrongWind } from 'react-icons/wi';
 import { BsPerson } from 'react-icons/bs';
 
-function Weather() {
+function Weather({ weather, units }) {
    return (
       <div className="weather-main">
-         <h3>Madrid</h3>
-         <p>partly sunny</p>
+         <h3>{weather.name}</h3>
+         <p>{weather.weather[0].description}</p>
          <div className="weather-icon">
             <p className="min-max">
                <FaTemperatureLow
@@ -17,9 +17,12 @@ function Weather() {
                      marginRight: '5px',
                   }}
                />
-               23°
+               {Math.round(weather.main.temp_min)}°
             </p>
-            <img src="/icons/11d.png" alt="weather-icon" />
+            <img
+               src={`/icons/${weather.weather[0].icon}.png`}
+               alt="weather-icon"
+            />
             <p className="min-max">
                <FaTemperatureHigh
                   style={{
@@ -28,32 +31,33 @@ function Weather() {
                      marginRight: '5px',
                   }}
                />
-               27°
+               {Math.round(weather.main.temp_max)}°
             </p>
          </div>
 
-         <p className="weather-temp">25°</p>
+         <p className="weather-temp">{Math.round(weather.main.temp)}°</p>
 
          <div className="line"></div>
 
          <div className="weather-details">
             <div className="details-item">
                <WiHumidity className="icon" />
-               <span className="text">Humidity: </span> 78%
+               <span className="text">Humidity: </span> {weather.main.humidity}%
             </div>
             <div className="details-item">
                <TbArrowBarToDown className="icon" />
                <span className="text">Pressure: </span>
-               <div>1005</div>
+               <div>{weather.main.pressure}</div>
             </div>
             <p className="details-item">
                <WiStrongWind className="icon" />
-               <span className="text">Wind: </span> 5 m/s
+               <span className="text">Wind: </span> {weather.wind.speed}{' '}
+               {units === 'metric' ? 'm/s' : 'mph'}
             </p>
             <p className="details-item">
                <BsPerson className="icon" />
                <span className="text">Feels Like: </span>
-               23°
+               {Math.round(weather.main.feels_like)}°
             </p>
          </div>
       </div>

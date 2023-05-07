@@ -27,6 +27,7 @@ function Input({
                style={{
                   fontSize: '30px',
                   color: 'white',
+                  cursor: 'pointer',
                }}
             />
          </div>
