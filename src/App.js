@@ -3,6 +3,7 @@ import { API_URL, API_KEY } from './api';
 import Input from './components/Input';
 import Weather from './components/Weather';
 import Forecast from './components/Forecast';
+import Spinner from './components/Spinner';
 
 function App() {
    const [location, setLocation] = useState();
@@ -109,23 +110,26 @@ function App() {
 
    return (
       <div className="app">
-         {isLoading ? (
-            <h1 style={{ color: 'white' }}>LOADING</h1>
-         ) : (
-            <div className="container">
-               <Input
-                  units={units}
-                  city={city}
-                  citySearchField={citySearchField}
-                  handleUnits={handleUnits}
-                  handleCity={handleCity}
-                  handleLocation={handleLocation}
-                  getWeatherByCity={getWeatherByCity}
-               />
-               <Weather weather={weatherData} units={units} />
-               <Forecast />
-            </div>
-         )}
+         <div className="container">
+            {isLoading ? (
+               // <h1 style={{ color: 'white' }}>LOADING</h1>
+               <Spinner />
+            ) : (
+               <>
+                  <Input
+                     units={units}
+                     city={city}
+                     citySearchField={citySearchField}
+                     handleUnits={handleUnits}
+                     handleCity={handleCity}
+                     handleLocation={handleLocation}
+                     getWeatherByCity={getWeatherByCity}
+                  />
+                  <Weather weather={weatherData} units={units} />
+                  <Forecast />
+               </>
+            )}
+         </div>
       </div>
    );
 }
