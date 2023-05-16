@@ -1,33 +1,36 @@
-function Forecast() {
+function Forecast({ forecast }) {
+   const WEEK = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+   ];
+
+   const today = new Date().getDay();
+
+   const forecastWeek = WEEK.slice(today, WEEK.length).concat(
+      WEEK.slice(0, today)
+   );
+
    return (
       <>
          <div>Forecast Details</div>
          <div className="days">
-            <div className="card">
-               <p>Mon</p>
-               <img src="/icons/03n.png" alt="weather-icon" />
-               <p>15°</p>
-            </div>
-            <div className="card">
-               <p>Mon</p>
-               <img src="/icons/03d.png" alt="weather-icon" />
-               <p>15°</p>
-            </div>
-            <div className="card">
-               <p>Mon</p>
-               <img src="/icons/11d.png" alt="weather-icon" />
-               <p>15°</p>
-            </div>
-            <div className="card">
-               <p>Mon</p>
-               <img src="/icons/01n.png" alt="weather-icon" />
-               <p>15°</p>
-            </div>
-            <div className="card">
-               <p>Mon</p>
-               <img src="/icons/03n.png" alt="weather-icon" />
-               <p>15°</p>
-            </div>
+            {forecast.map((day, idx) => {
+               return (
+                  <div className="card" key={idx}>
+                     <p>{forecastWeek[idx].substring(0, 3).toUpperCase()}</p>
+                     <img
+                        src={`/icons/${day.weather[0].icon}.png`}
+                        alt="weather-icon"
+                     />
+                     <p>{Math.round(day.main.temp)}°</p>
+                  </div>
+               );
+            })}
          </div>
       </>
    );

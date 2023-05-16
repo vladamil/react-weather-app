@@ -11,7 +11,7 @@ function App() {
    const [citySearchField, setCitySearchField] = useState('');
    const [units, setUnits] = useState('metric');
    const [weatherData, setWeatherData] = useState();
-   const [ForecastData, setForecastData] = useState();
+   const [forecastData, setForecastData] = useState();
    const [isLoading, setIsLoading] = useState(true);
 
    // Get initial current position(lat/lon)
@@ -38,8 +38,12 @@ function App() {
             ]);
             const weatherData = await res[0].json();
             const forecastData = await res[1].json();
+
+            const forecastFilteredData = forecastData.list.filter(
+               (item, idx) => idx % 8 === 0
+            );
             setWeatherData(weatherData);
-            setForecastData(forecastData);
+            setForecastData(forecastFilteredData);
             setIsLoading(false);
          };
 
@@ -62,8 +66,11 @@ function App() {
             ]);
             const weatherData = await res[0].json();
             const forecastData = await res[1].json();
+            const forecastFilteredData = forecastData.list.filter(
+               (item, idx) => idx % 8 === 0
+            );
             setWeatherData(weatherData);
-            setForecastData(forecastData);
+            setForecastData(forecastFilteredData);
             setIsLoading(false);
          };
 
@@ -103,8 +110,11 @@ function App() {
       ]);
       const weatherData = await res[0].json();
       const forecastData = await res[1].json();
+      const forecastFilteredData = forecastData.list.filter(
+         (item, idx) => idx % 8 === 0
+      );
       setWeatherData(weatherData);
-      setForecastData(forecastData);
+      setForecastData(forecastFilteredData);
       setIsLoading(false);
    };
 
@@ -112,7 +122,6 @@ function App() {
       <div className="app">
          <div className="container">
             {isLoading ? (
-               // <h1 style={{ color: 'white' }}>LOADING</h1>
                <Spinner />
             ) : (
                <>
@@ -126,7 +135,7 @@ function App() {
                      getWeatherByCity={getWeatherByCity}
                   />
                   <Weather weather={weatherData} units={units} />
-                  <Forecast />
+                  <Forecast forecast={forecastData} />
                </>
             )}
          </div>

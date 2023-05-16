@@ -27,7 +27,7 @@ function Weather({ weather, units }) {
                <FaTemperatureHigh
                   style={{
                      fontSize: '25px',
-                     color: 'red',
+                     color: '#ff3d00',
                      marginRight: '5px',
                   }}
                />
