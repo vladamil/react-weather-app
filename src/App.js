@@ -135,7 +135,7 @@ function App() {
                      getWeatherByCity={getWeatherByCity}
                   />
                   <Weather weather={weatherData} units={units} />
-                  <Forecast forecast={forecastData} />
+                  <Forecast forecast={forecastData} units={units} />
                </>
             )}
          </div>

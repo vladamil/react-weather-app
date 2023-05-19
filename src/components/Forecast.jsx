@@ -1,4 +1,8 @@
-function Forecast({ forecast }) {
+import { useState } from 'react';
+
+function Forecast({ forecast, units }) {
+   const [dayIndex, setDayIndex] = useState(0);
+
    const WEEK = [
       'Monday',
       'Tuesday',
@@ -18,27 +22,42 @@ function Forecast({ forecast }) {
    return (
       <div className="forecast-container">
          <div className="day-details">
-            <div className="day-header">
-               <p className="day-name">Friday</p>
-               <img src="./icons/09d.png" alt="weather-icon" />
-               <p>heavy rain</p>
+            <div className="day-header" style={{ width: '33%' }}>
+               <p className="day-name">
+                  {dayIndex === 0 ? 'Tommorow' : forecastWeek[dayIndex]}
+               </p>
+               <img
+                  src={`/icons/${forecast[dayIndex].weather[0].icon}.png`}
+                  alt="weather-icon"
+               />
+               <p style={{ fontSize: '12px' }}>
+                  {forecast[dayIndex].weather[0].description}
+               </p>
             </div>
-            <div className="day-temp">17°</div>
-            <div className="day-data">
+            <div className="day-temp">
+               {Math.round(forecast[dayIndex].main.temp)}°
+            </div>
+            <div className="day-data" style={{ width: '33%' }}>
                <p>
-                  min: <span>17°</span>
+                  min:{' '}
+                  <span>{Math.round(forecast[dayIndex].main.temp_min)}°</span>
                </p>
                <p>
-                  max: <span>22°</span>
+                  max:{' '}
+                  <span>{Math.round(forecast[dayIndex].main.temp_max)}°</span>
                </p>
                <p>
-                  humidity: <span>82%</span>
+                  humidity: <span>{forecast[dayIndex].main.humidity}%</span>
                </p>
                <p>
-                  wind: <span>3m/s</span>
+                  wind:{' '}
+                  <span>
+                     {forecast[dayIndex].wind.speed}{' '}
+                     {units === 'metric' ? 'm/s' : 'mph'}
+                  </span>
                </p>
                <p>
-                  pressure: <span>998</span>
+                  pressure: <span>{forecast[dayIndex].main.pressure}</span>
                </p>
                <p>
                   feels like: <span>18°</span>
@@ -52,12 +71,12 @@ function Forecast({ forecast }) {
                   <div
                      className="day-card"
                      key={idx}
-                     onClick={() => {
-                        console.log(idx);
-                     }}
+                     onClick={() => setDayIndex(idx)}
                      style={{
                         // backgroundColor: `${idx === 3 ? '#656673' : ''}`,
-                        border: `${idx === 3 ? '1px solid white' : 'none'}`,
+                        border: `${
+                           idx === dayIndex ? '1px solid white' : 'none'
+                        }`,
                      }}
                   >
                      <p>{forecastWeek[idx].substring(0, 3).toUpperCase()}</p>

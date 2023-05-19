@@ -166,7 +166,8 @@
 
 .day-details .day-name {
    font-weight: 300;
-   font-size: 18px;
+   font-size: 16px;
+   margin-bottom: 10px;
 }
 
 .day-details img {
@@ -176,6 +177,7 @@
 
 .day-details .day-data {
    font-size: 14px;
+   padding: 0 10px;
 }
 
 .day-details .day-data span {
