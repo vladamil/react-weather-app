@@ -13,6 +13,7 @@ function App() {
    const [weatherData, setWeatherData] = useState();
    const [forecastData, setForecastData] = useState();
    const [isLoading, setIsLoading] = useState(true);
+   const [isErrorr, setIsError] = useState(null);
 
    // Get initial current position(lat/lon)
    useEffect(() => {
@@ -28,23 +29,34 @@ function App() {
       // Get initial weather data based on current position
       if (location) {
          const getData = async () => {
-            const res = await Promise.all([
-               fetch(
-                  `${API_URL}/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
-               ),
-               fetch(
-                  `${API_URL}/forecast?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
-               ),
-            ]);
-            const weatherData = await res[0].json();
-            const forecastData = await res[1].json();
+            try {
+               const res = await Promise.all([
+                  fetch(
+                     `${API_URL}/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
+                  ),
+                  fetch(
+                     `${API_URL}/forecast?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=${units}`
+                  ),
+               ]);
 
-            const forecastFilteredData = forecastData.list.filter(
-               (item, idx) => idx % 8 === 0
-            );
-            setWeatherData(weatherData);
-            setForecastData(forecastFilteredData);
-            setIsLoading(false);
+               if (!res[0].ok || !res[1].ok) {
+                  throw new Error('FATAL ERROR');
+               }
+
+               const weatherData = await res[0].json();
+               const forecastData = await res[1].json();
+
+               const forecastFilteredData = forecastData.list.filter(
+                  (item, idx) => idx % 8 === 0
+               );
+               setWeatherData(weatherData);
+               setForecastData(forecastFilteredData);
+               setIsError(null);
+               setIsLoading(false);
+            } catch (error) {
+               setIsError(error.message);
+               setIsLoading(false);
+            }
          };
 
          getData();
@@ -56,22 +68,33 @@ function App() {
       if (weatherData && !location) {
          setIsLoading(true);
          const getData = async () => {
-            const res = await Promise.all([
-               fetch(
-                  `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
-               ),
-               fetch(
-                  `${API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${units}`
-               ),
-            ]);
-            const weatherData = await res[0].json();
-            const forecastData = await res[1].json();
-            const forecastFilteredData = forecastData.list.filter(
-               (item, idx) => idx % 8 === 0
-            );
-            setWeatherData(weatherData);
-            setForecastData(forecastFilteredData);
-            setIsLoading(false);
+            try {
+               const res = await Promise.all([
+                  fetch(
+                     `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
+                  ),
+                  fetch(
+                     `${API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${units}`
+                  ),
+               ]);
+
+               if (!res[0].ok || !res[1].ok) {
+                  throw new Error('FATAL ERROR');
+               }
+
+               const weatherData = await res[0].json();
+               const forecastData = await res[1].json();
+               const forecastFilteredData = forecastData.list.filter(
+                  (item, idx) => idx % 8 === 0
+               );
+               setWeatherData(weatherData);
+               setForecastData(forecastFilteredData);
+               setIsError(null);
+               setIsLoading(false);
+            } catch (error) {
+               setIsError(error.message);
+               setIsLoading(false);
+            }
          };
 
          getData();
@@ -104,40 +127,60 @@ function App() {
       setCitySearchField('');
       setIsLoading(true);
 
-      const res = await Promise.all([
-         fetch(`${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`),
-         fetch(`${API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${units}`),
-      ]);
-      const weatherData = await res[0].json();
-      const forecastData = await res[1].json();
-      const forecastFilteredData = forecastData.list.filter(
-         (item, idx) => idx % 8 === 0
-      );
-      setWeatherData(weatherData);
-      setForecastData(forecastFilteredData);
-      setIsLoading(false);
+      try {
+         const res = await Promise.all([
+            fetch(
+               `${API_URL}/weather?q=${city}&appid=${API_KEY}&units=${units}`
+            ),
+            fetch(
+               `${API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${units}`
+            ),
+         ]);
+         if (!res[0].ok || !res[1].ok) {
+            throw new Error('FATAL ERROR');
+         }
+
+         const weatherData = await res[0].json();
+         const forecastData = await res[1].json();
+         const forecastFilteredData = forecastData.list.filter(
+            (item, idx) => idx % 8 === 0
+         );
+         setWeatherData(weatherData);
+         setForecastData(forecastFilteredData);
+         setIsError(null);
+         setIsLoading(false);
+      } catch (error) {
+         setIsError(error.message);
+         setIsLoading(false);
+      }
    };
 
    return (
       <div className="app">
          <div className="container">
-            {isLoading ? (
-               <Spinner />
-            ) : (
-               <>
-                  <Input
-                     units={units}
-                     city={city}
-                     citySearchField={citySearchField}
-                     handleUnits={handleUnits}
-                     handleCity={handleCity}
-                     handleLocation={handleLocation}
-                     getWeatherByCity={getWeatherByCity}
-                  />
-                  <Weather weather={weatherData} units={units} />
-                  <Forecast forecast={forecastData} units={units} />
-               </>
-            )}
+            <>
+               <Input
+                  units={units}
+                  city={city}
+                  citySearchField={citySearchField}
+                  handleUnits={handleUnits}
+                  handleCity={handleCity}
+                  handleLocation={handleLocation}
+                  getWeatherByCity={getWeatherByCity}
+               />
+               <div className="main">
+                  {isLoading ? (
+                     <Spinner />
+                  ) : isErrorr ? (
+                     <p>ERORR is FATAL</p>
+                  ) : (
+                     <>
+                        <Weather weather={weatherData} units={units} />
+                        <Forecast forecast={forecastData} units={units} />
+                     </>
+                  )}
+               </div>
+            </>
          </div>
       </div>
    );

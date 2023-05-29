@@ -20,14 +20,11 @@
    padding: 20px 10px;
    max-width: 960px;
    margin: auto;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: space-between;
 }
 
 .search-bar {
    width: 100%;
+   height: 50px;
    display: flex;
    align-items: center;
    justify-content: space-evenly;
@@ -64,6 +61,14 @@
    background: #e5e5e5;
 }
 
+.main {
+   height: calc(100% - 50px);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+}
+
 /* WEATHER */
 /* ------------------------------------ */
 
@@ -74,6 +79,7 @@
    justify-content: center;
    background-color: rgba(255, 255, 255, 0.1);
    padding: 10px;
+   margin-bottom: 50px;
    border-radius: 20px;
 }
 
