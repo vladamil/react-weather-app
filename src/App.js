@@ -4,6 +4,7 @@ import Input from './components/Input';
 import Weather from './components/Weather';
 import Forecast from './components/Forecast';
 import Spinner from './components/Spinner';
+import NotFound from './components/NotFound';
 
 function App() {
    const [location, setLocation] = useState();
@@ -40,7 +41,7 @@ function App() {
                ]);
 
                if (!res[0].ok || !res[1].ok) {
-                  throw new Error('FATAL ERROR');
+                  throw new Error('Could not fetch data');
                }
 
                const weatherData = await res[0].json();
@@ -79,7 +80,7 @@ function App() {
                ]);
 
                if (!res[0].ok || !res[1].ok) {
-                  throw new Error('FATAL ERROR');
+                  throw new Error('Could not fetch data');
                }
 
                const weatherData = await res[0].json();
@@ -137,7 +138,7 @@ function App() {
             ),
          ]);
          if (!res[0].ok || !res[1].ok) {
-            throw new Error('FATAL ERROR');
+            throw new Error('Could not fetch data');
          }
 
          const weatherData = await res[0].json();
@@ -172,7 +173,7 @@ function App() {
                   {isLoading ? (
                      <Spinner />
                   ) : isErrorr ? (
-                     <p>ERORR is FATAL</p>
+                     <NotFound />
                   ) : (
                      <>
                         <Weather weather={weatherData} units={units} />
