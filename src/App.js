@@ -14,7 +14,7 @@ function App() {
    const [weatherData, setWeatherData] = useState();
    const [forecastData, setForecastData] = useState();
    const [isLoading, setIsLoading] = useState(true);
-   const [isErrorr, setIsError] = useState(null);
+   const [isError, setIsError] = useState(null);
 
    // Get initial current position(lat/lon)
    useEffect(() => {
@@ -172,7 +172,7 @@ function App() {
                <div className="main">
                   {isLoading ? (
                      <Spinner />
-                  ) : isErrorr ? (
+                  ) : isError ? (
                      <NotFound />
                   ) : (
                      <>
