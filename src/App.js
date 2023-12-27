@@ -18,12 +18,18 @@ function App() {
 
    // Get initial current position(lat/lon)
    useEffect(() => {
-      navigator.geolocation.getCurrentPosition((position) => {
-         setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-         });
-      });
+      navigator.geolocation.getCurrentPosition(
+         (position) => {
+            setLocation({
+               lat: position.coords.latitude,
+               lon: position.coords.longitude,
+            });
+         },
+         (error) => {
+            setIsError(error.message);
+            setIsLoading(false);
+         }
+      );
    }, []);
 
    useEffect(() => {
@@ -41,7 +47,7 @@ function App() {
                ]);
 
                if (!res[0].ok || !res[1].ok) {
-                  throw new Error('Could not fetch data');
+                  throw new Error('Could not fetch data.');
                }
 
                const weatherData = await res[0].json();
@@ -80,7 +86,7 @@ function App() {
                ]);
 
                if (!res[0].ok || !res[1].ok) {
-                  throw new Error('Could not fetch data');
+                  throw new Error('Could not fetch data.');
                }
 
                const weatherData = await res[0].json();
@@ -113,12 +119,17 @@ function App() {
 
    // Get current position on demand (lat/lon)
    const handleLocation = () => {
-      navigator.geolocation.getCurrentPosition((position) => {
-         setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-         });
-      });
+      navigator.geolocation.getCurrentPosition(
+         (position) => {
+            setLocation({
+               lat: position.coords.latitude,
+               lon: position.coords.longitude,
+            });
+         },
+         (error) => {
+            setIsError(error.message);
+         }
+      );
       setCity('');
    };
 
@@ -138,7 +149,7 @@ function App() {
             ),
          ]);
          if (!res[0].ok || !res[1].ok) {
-            throw new Error('Could not fetch data');
+            throw new Error('We could not find data for that location.');
          }
 
          const weatherData = await res[0].json();
@@ -173,7 +184,7 @@ function App() {
                   {isLoading ? (
                      <Spinner />
                   ) : isError ? (
-                     <NotFound />
+                     <NotFound error={isError} />
                   ) : (
                      <>
                         <Weather weather={weatherData} units={units} />
