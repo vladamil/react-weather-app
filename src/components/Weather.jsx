@@ -1,3 +1,4 @@
+import React from 'react';
 import { FaTemperatureHigh, FaTemperatureLow } from 'react-icons/fa';
 import { TbArrowBarToDown } from 'react-icons/tb';
 import { WiHumidity, WiStrongWind } from 'react-icons/wi';
@@ -64,4 +65,4 @@ function Weather({ weather, units }) {
    );
 }
 
-export default Weather;
+export default React.memo(Weather);

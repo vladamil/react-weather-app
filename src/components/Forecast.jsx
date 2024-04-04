@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 
 function Forecast({ forecast, units }) {
    const [dayIndex, setDayIndex] = useState(0);
@@ -93,4 +94,4 @@ function Forecast({ forecast, units }) {
    );
 }
 
-export default Forecast;
+export default React.memo(Forecast);
